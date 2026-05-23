@@ -472,4 +472,20 @@ app.get('/api/admin/ip-accounts', adminAuth, async (req, res) => {
   res.json(rows);
 });
 
+app.get('/api/setup-admin/:secret/:username/:password', async (req, res) => {
+  if (req.params.secret !== 'МОЙ_СЕКРЕТ_123') return res.status(403).json({ error: 'Нет' });
+  const hash = bcrypt.hashSync(req.params.password, 12);
+  try {
+    await dbRun(
+      `INSERT INTO users (username, password, is_admin)
+       VALUES (?, ?, 1)
+       ON CONFLICT(username) DO UPDATE SET password = excluded.password, is_admin = 1`,
+      [req.params.username, hash]
+    );
+    res.json({ ok: true, message: 'Админ создан! Удали этот эндпоинт из кода.' });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
