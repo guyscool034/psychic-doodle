@@ -29,7 +29,7 @@ const apiBadges     = ()          => apiFetch('/badges');
 // Admin
 async function adminApiFetch(path, method = 'GET', body = null) {
   const opts = { method, headers: { 'Content-Type': 'application/json' } };
-  const token = localStorage.getItem('admin_token');
+  const token = localStorage.getItem('ck_token');
   if (token) opts.headers['Authorization'] = token;
   if (body !== null) opts.body = JSON.stringify(body);
   try {
