@@ -13,6 +13,7 @@ const G = {
   username: '', is_admin: false, badges: [],
   rank: 'Новичок',
   pendingCoins: 0, pendingClicks: 0, syncTimer: null,
+  pendingUpgrade: false, // флаг: идёт покупка апгрейда
 };
 
 const SKIN_EMOJI = { default:'🪙', fire:'🔥', ice:'❄️', star:'⭐', diamond:'💎', skull:'💀', rainbow:'🌈' };
@@ -41,6 +42,16 @@ function doClick() {
   refreshUpgrades();
 }
 
+// Called by coin button click handler in ui.js
+function onCoinClick() {
+  doClick();
+  const coinBtn = document.getElementById('coin-btn');
+  coinBtn.classList.remove('pop');
+  void coinBtn.offsetWidth;
+  coinBtn.classList.add('pop');
+  spawnRipple();
+}
+
 function scheduleSync() {
   if (G.syncTimer) return;
   G.syncTimer = setTimeout(async () => {
@@ -51,11 +62,14 @@ function scheduleSync() {
     if (amount > 0) {
       const r = await apiClick(amount);
       if (r.error) {
-        G.coins = Math.max(0, G.coins - amount);
-        updateCoins();
+        // Только если нет активной покупки апгрейда — откатываем
+        if (!G.pendingUpgrade) {
+          G.coins = Math.max(0, G.coins - amount);
+          updateCoins();
+        }
       } else {
-        // Sync server state
-        G.coins       = r.coins;
+        // Синхронизируем только клики и ранг — монеты не трогаем,
+        // чтобы не затереть результат покупки апгрейда
         G.totalClicks = r.total_clicks;
         if (r.rank) { G.rank = r.rank; updateRankDisplay(); }
         if (r.newBadges && r.newBadges.length) {
@@ -64,7 +78,11 @@ function scheduleSync() {
             showBadgeNotif(b);
           });
         }
-        updateCoins();
+        // Монеты синхронизируем только если нет активной покупки апгрейда
+        if (!G.pendingUpgrade) {
+          G.coins = r.coins;
+          updateCoins();
+        }
         document.getElementById('hdr-clicks').textContent = G.totalClicks.toLocaleString();
       }
     }
@@ -82,7 +100,10 @@ async function buyUpgrade(upg) {
   recalcCpc();
   renderUpgrades();
 
+  G.pendingUpgrade = true;
   const res = await apiBuyUpgrade(upg.id);
+  G.pendingUpgrade = false;
+
   if (res.error) {
     // Rollback
     G.coins += cost;
