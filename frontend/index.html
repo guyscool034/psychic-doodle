@@ -4,117 +4,154 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>КоинКликер</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="theme-dark">
+<body>
 
-<div id="app">
-
-  <div id="screen-auth" class="screen active">
-    <div class="auth-box">
-      <div class="logo">🪙 КоинКликер</div>
-      <div class="tabs">
-        <button class="tab active" data-tab="login">Войти</button>
-        <button class="tab" data-tab="register">Регистрация</button>
-      </div>
-      <div id="tab-login" class="tab-content active">
-        <input type="text" id="login-username" placeholder="Никнейм" maxlength="20">
-        <input type="password" id="login-password" placeholder="Пароль" maxlength="40">
-        <button id="btn-login" class="btn-primary">Войти</button>
-        <div id="login-error" class="error-msg"></div>
-      </div>
-      <div id="tab-register" class="tab-content">
-        <input type="text" id="reg-username" placeholder="Никнейм (3–20 символов)" maxlength="20">
-        <input type="password" id="reg-password" placeholder="Пароль (мин. 4 символа)" maxlength="40">
-        <button id="btn-register" class="btn-primary">Создать аккаунт</button>
-        <div id="reg-error" class="error-msg"></div>
-        <div id="reg-success" class="success-msg"></div>
-      </div>
+<!-- ЭКРАН ВХОДА -->
+<div id="screen-auth" class="screen active">
+  <div class="auth-wrap">
+    <div class="auth-logo">🪙</div>
+    <h1 class="auth-title">КоинКликер</h1>
+    <div class="auth-tabs">
+      <button class="atab active" data-tab="login">Войти</button>
+      <button class="atab" data-tab="reg">Регистрация</button>
+    </div>
+    <div id="tab-login" class="atab-body active">
+      <input id="l-user" type="text" placeholder="Никнейм" maxlength="20" autocomplete="username">
+      <input id="l-pass" type="password" placeholder="Пароль" maxlength="40" autocomplete="current-password">
+      <button class="btn-gold" id="btn-login">Войти</button>
+      <div id="l-err" class="msg err"></div>
+    </div>
+    <div id="tab-reg" class="atab-body">
+      <input id="r-user" type="text" placeholder="Никнейм (3–20 символов)" maxlength="20" autocomplete="username">
+      <input id="r-pass" type="password" placeholder="Пароль (мин. 4 символа)" maxlength="40" autocomplete="new-password">
+      <input id="r-pass2" type="password" placeholder="Повтори пароль" maxlength="40" autocomplete="new-password">
+      <button class="btn-gold" id="btn-reg">Создать аккаунт</button>
+      <div id="r-err" class="msg err"></div>
+      <div id="r-ok" class="msg ok"></div>
     </div>
   </div>
+</div>
 
-  <div id="screen-game" class="screen">
-    <header class="topbar">
-      <div class="topbar-left">
-        <span id="header-username">Игрок</span>
-      </div>
-      <div class="coin-count">
-        <span id="coin-display">0</span> монет
-      </div>
-      <div class="topbar-right">
-        <button class="icon-btn" id="btn-nav-leaderboard" title="Лидеры">🏆</button>
-        <button class="icon-btn" id="btn-nav-skins" title="Скины">🎨</button>
-        <button class="icon-btn" id="btn-nav-settings" title="Настройки">⚙️</button>
-        <button class="icon-btn" id="btn-logout" title="Выйти">🚪</button>
-      </div>
-    </header>
+<!-- ИГРОВОЙ ЭКРАН -->
+<div id="screen-game" class="screen">
+  <div class="game-layout">
 
-    <main class="game-main">
-      <div class="clicker-area">
-        <div id="click-stats">
-          <span>Всего кликов: <strong id="total-clicks">0</strong></span>
-          <span>+<strong id="coins-per-click">1</strong> за клик</span>
-        </div>
-        <div class="coin-wrapper">
-          <button id="big-coin" class="big-coin">
-            <span id="coin-emoji">🪙</span>
-          </button>
-        </div>
-        <div id="click-particles"></div>
+    <!-- Левая панель: статы + апгрейды -->
+    <div class="side-panel left-panel">
+      <div class="player-card">
+        <div class="player-name" id="hdr-name">Игрок</div>
+        <div class="player-stat">Кликов: <span id="hdr-clicks">0</span></div>
       </div>
-
-      <div class="upgrades-panel">
-        <h3>Улучшения</h3>
+      <div class="upgrades-wrap">
+        <div class="panel-title">⬆️ Улучшения</div>
         <div id="upgrades-list"></div>
       </div>
-    </main>
-  </div>
+    </div>
 
-  <div id="screen-leaderboard" class="screen">
-    <div class="subscreen">
-      <div class="subscreen-header">
-        <button class="back-btn" id="btn-back-lb">← Назад</button>
-        <h2>🏆 Лидеры</h2>
+    <!-- Центр: монета -->
+    <div class="center-panel">
+      <div class="coins-display">
+        <span class="coins-num" id="coins-num">0</span>
+        <span class="coins-label">монет</span>
       </div>
-      <div id="leaderboard-list" class="list-container"></div>
+      <div class="cpc-display">+<span id="cpc">1</span> за клик</div>
+      <div class="coin-area">
+        <div id="particles"></div>
+        <button id="coin-btn" class="coin-btn">
+          <span id="coin-face">🪙</span>
+        </button>
+      </div>
+      <div class="bottom-nav">
+        <button class="nav-btn" id="nav-lb">🏆<span>Лидеры</span></button>
+        <button class="nav-btn" id="nav-skins">🎨<span>Скины</span></button>
+        <button class="nav-btn" id="nav-settings">⚙️<span>Настройки</span></button>
+        <button class="nav-btn danger" id="nav-logout">🚪<span>Выйти</span></button>
+      </div>
+    </div>
+
+    <!-- Правая панель: последние события -->
+    <div class="side-panel right-panel">
+      <div class="panel-title">📋 Активность</div>
+      <div id="activity-log" class="activity-log"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ЛИДЕРБОРД -->
+<div id="screen-lb" class="screen">
+  <div class="modal-wrap">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>🏆 Таблица лидеров</h2>
+        <button class="close-btn" data-back="game">✕</button>
+      </div>
+      <div class="lb-filters">
+        <button class="filter-btn active" data-sort="coins">По монетам</button>
+        <button class="filter-btn" data-sort="clicks">По кликам</button>
+      </div>
+      <div id="lb-list" class="lb-list"></div>
     </div>
   </div>
+</div>
 
-  <div id="screen-skins" class="screen">
-    <div class="subscreen">
-      <div class="subscreen-header">
-        <button class="back-btn" id="btn-back-skins">← Назад</button>
-        <h2>🎨 Скины</h2>
-        <span>У тебя: <strong id="skins-coin-count">0</strong> монет</span>
+<!-- СКИНЫ -->
+<div id="screen-skins" class="screen">
+  <div class="modal-wrap">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>🎨 Магазин скинов</h2>
+        <button class="close-btn" data-back="game">✕</button>
       </div>
-      <div id="skins-list" class="skins-grid"></div>
+      <div class="modal-coins">У тебя: <strong id="shop-coins">0</strong> монет</div>
+      <div id="skins-grid" class="skins-grid"></div>
     </div>
   </div>
+</div>
 
-  <div id="screen-settings" class="screen">
-    <div class="subscreen">
-      <div class="subscreen-header">
-        <button class="back-btn" id="btn-back-settings">← Назад</button>
+<!-- НАСТРОЙКИ -->
+<div id="screen-settings" class="screen">
+  <div class="modal-wrap">
+    <div class="modal-box">
+      <div class="modal-header">
         <h2>⚙️ Настройки</h2>
+        <button class="close-btn" data-back="game">✕</button>
       </div>
       <div class="settings-section">
-        <h3>Тема оформления</h3>
-        <div class="theme-grid">
-          <button class="theme-btn" data-theme="dark">🌑 Тёмная</button>
-          <button class="theme-btn" data-theme="light">☀️ Светлая</button>
-          <button class="theme-btn" data-theme="green">🌿 Зелёная</button>
-          <button class="theme-btn" data-theme="purple">🔮 Фиолетовая</button>
-          <button class="theme-btn" data-theme="red">🔴 Красная</button>
+        <div class="settings-label">Тема</div>
+        <div class="theme-row">
+          <button class="theme-pill" data-theme="dark">🌑 Тёмная</button>
+          <button class="theme-pill" data-theme="light">☀️ Светлая</button>
+          <button class="theme-pill" data-theme="green">🌿 Зелёная</button>
+          <button class="theme-pill" data-theme="purple">🔮 Фиолет.</button>
+          <button class="theme-pill" data-theme="red">🔴 Красная</button>
         </div>
       </div>
       <div class="settings-section">
-        <h3>Аккаунт</h3>
-        <p id="settings-username"></p>
-        <p id="settings-joined"></p>
+        <div class="settings-label">Аккаунт</div>
+        <div class="settings-info" id="settings-info"></div>
+      </div>
+      <div class="settings-section">
+        <div class="settings-label">Опасная зона</div>
+        <button class="btn-danger" id="btn-logout2">🚪 Выйти из аккаунта</button>
       </div>
     </div>
   </div>
+</div>
 
+<!-- ДИАЛОГ ПОДТВЕРЖДЕНИЯ -->
+<div id="confirm-overlay" class="confirm-overlay hidden">
+  <div class="confirm-box">
+    <div class="confirm-text" id="confirm-text">Ты уверен?</div>
+    <div class="confirm-btns">
+      <button class="btn-gold" id="confirm-yes">Да</button>
+      <button class="btn-cancel" id="confirm-no">Отмена</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/api.js"></script>
