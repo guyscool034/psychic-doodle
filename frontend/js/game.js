@@ -62,14 +62,13 @@ function scheduleSync() {
     if (amount > 0) {
       const r = await apiClick(amount);
       if (r.error) {
-        // Только если нет активной покупки апгрейда — откатываем
-        if (!G.pendingUpgrade) {
-          G.coins = Math.max(0, G.coins - amount);
-          updateCoins();
-        }
+        // Сервер отклонил — откатываем только эту порцию кликов
+        G.coins = Math.max(0, G.coins - amount);
+        updateCoins();
       } else {
-        // Синхронизируем только клики и ранг — монеты не трогаем,
-        // чтобы не затереть результат покупки апгрейда
+        // Монеты НЕ перезаписываем — локальный счётчик всегда актуальнее,
+        // потому что пользователь мог кликнуть ещё пока шёл запрос.
+        // Синхронизируем только клики, ранг и значки.
         G.totalClicks = r.total_clicks;
         if (r.rank) { G.rank = r.rank; updateRankDisplay(); }
         if (r.newBadges && r.newBadges.length) {
@@ -77,11 +76,6 @@ function scheduleSync() {
             if (!G.badges.includes(b)) G.badges.push(b);
             showBadgeNotif(b);
           });
-        }
-        // Монеты синхронизируем только если нет активной покупки апгрейда
-        if (!G.pendingUpgrade) {
-          G.coins = r.coins;
-          updateCoins();
         }
         document.getElementById('hdr-clicks').textContent = G.totalClicks.toLocaleString();
       }
