@@ -76,15 +76,10 @@ function setupAuth() {
 
 function setupGame() {
   const coinBtn = document.getElementById('coin-btn');
-  coinBtn.addEventListener('click', () => {
-    doClick();
-    coinBtn.classList.remove('pop');
-    void coinBtn.offsetWidth;
-    coinBtn.classList.add('pop');
-    spawnRipple();
-  });
+  coinBtn.addEventListener('click', onCoinClick);
 
   document.getElementById('nav-lb').addEventListener('click', openLeaderboard);
+  document.getElementById('nav-profile').addEventListener('click', () => openProfile(G.username));
   document.getElementById('nav-skins').addEventListener('click', openSkins);
   document.getElementById('nav-settings').addEventListener('click', openSettings);
   document.getElementById('nav-logout').addEventListener('click', logout);
