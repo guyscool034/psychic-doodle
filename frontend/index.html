@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>КоинКликер</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-dark">
+
+<div id="app">
+
+  <div id="screen-auth" class="screen active">
+    <div class="auth-box">
+      <div class="logo">🪙 КоинКликер</div>
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Войти</button>
+        <button class="tab" data-tab="register">Регистрация</button>
+      </div>
+      <div id="tab-login" class="tab-content active">
+        <input type="text" id="login-username" placeholder="Никнейм" maxlength="20">
+        <input type="password" id="login-password" placeholder="Пароль" maxlength="40">
+        <button id="btn-login" class="btn-primary">Войти</button>
+        <div id="login-error" class="error-msg"></div>
+      </div>
+      <div id="tab-register" class="tab-content">
+        <input type="text" id="reg-username" placeholder="Никнейм (3–20 символов)" maxlength="20">
+        <input type="password" id="reg-password" placeholder="Пароль (мин. 4 символа)" maxlength="40">
+        <button id="btn-register" class="btn-primary">Создать аккаунт</button>
+        <div id="reg-error" class="error-msg"></div>
+        <div id="reg-success" class="success-msg"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span id="header-username">Игрок</span>
+      </div>
+      <div class="coin-count">
+        <span id="coin-display">0</span> монет
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="btn-nav-leaderboard" title="Лидеры">🏆</button>
+        <button class="icon-btn" id="btn-nav-skins" title="Скины">🎨</button>
+        <button class="icon-btn" id="btn-nav-settings" title="Настройки">⚙️</button>
+        <button class="icon-btn" id="btn-logout" title="Выйти">🚪</button>
+      </div>
+    </header>
+
+    <main class="game-main">
+      <div class="clicker-area">
+        <div id="click-stats">
+          <span>Всего кликов: <strong id="total-clicks">0</strong></span>
+          <span>+<strong id="coins-per-click">1</strong> за клик</span>
+        </div>
+        <div class="coin-wrapper">
+          <button id="big-coin" class="big-coin">
+            <span id="coin-emoji">🪙</span>
+          </button>
+        </div>
+        <div id="click-particles"></div>
+      </div>
+
+      <div class="upgrades-panel">
+        <h3>Улучшения</h3>
+        <div id="upgrades-list"></div>
+      </div>
+    </main>
+  </div>
+
+  <div id="screen-leaderboard" class="screen">
+    <div class="subscreen">
+      <div class="subscreen-header">
+        <button class="back-btn" id="btn-back-lb">← Назад</button>
+        <h2>🏆 Лидеры</h2>
+      </div>
+      <div id="leaderboard-list" class="list-container"></div>
+    </div>
+  </div>
+
+  <div id="screen-skins" class="screen">
+    <div class="subscreen">
+      <div class="subscreen-header">
+        <button class="back-btn" id="btn-back-skins">← Назад</button>
+        <h2>🎨 Скины</h2>
+        <span>У тебя: <strong id="skins-coin-count">0</strong> монет</span>
+      </div>
+      <div id="skins-list" class="skins-grid"></div>
+    </div>
+  </div>
+
+  <div id="screen-settings" class="screen">
+    <div class="subscreen">
+      <div class="subscreen-header">
+        <button class="back-btn" id="btn-back-settings">← Назад</button>
+        <h2>⚙️ Настройки</h2>
+      </div>
+      <div class="settings-section">
+        <h3>Тема оформления</h3>
+        <div class="theme-grid">
+          <button class="theme-btn" data-theme="dark">🌑 Тёмная</button>
+          <button class="theme-btn" data-theme="light">☀️ Светлая</button>
+          <button class="theme-btn" data-theme="green">🌿 Зелёная</button>
+          <button class="theme-btn" data-theme="purple">🔮 Фиолетовая</button>
+          <button class="theme-btn" data-theme="red">🔴 Красная</button>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>Аккаунт</h3>
+        <p id="settings-username"></p>
+        <p id="settings-joined"></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
