@@ -1,8 +1,8 @@
 async function init() {
-  setupAuthUI();
-  setupGameUI();
+  setupAuth();
+  setupGame();
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('ck_token');
   if (!token) {
     showScreen('auth');
     return;
@@ -10,12 +10,12 @@ async function init() {
 
   const res = await apiMe();
   if (res.error) {
-    localStorage.removeItem('token');
+    localStorage.removeItem('ck_token');
     showScreen('auth');
     return;
   }
 
-  loadGameState(res);
+  loadState(res);
   renderUpgrades();
   showScreen('game');
 }
